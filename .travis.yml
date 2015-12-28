@@ -2,6 +2,9 @@ language: node_js
 node_js:
   - 4
 
+env:
+  - CXX=g++-4.8
+
 before_install:
   addons:
     firefox: "43.0.1"
