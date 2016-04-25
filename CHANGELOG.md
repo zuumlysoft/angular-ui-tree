@@ -1,3 +1,7 @@
+# 2.16.0
+
+*  Allow drag-drop on empty tree [#738](https://github.com/angular-ui-tree/angular-ui-tree/pull/738)
+
 # 2.15.0
 
 * Remove scope dependency [#648](https://github.com/angular-ui-tree/angular-ui-tree/pull/648)

@@ -1,5 +1,5 @@
 /**
- * @license Angular UI Tree v2.15.0
+ * @license Angular UI Tree v2.16.0
  * (c) 2010-2016. https://github.com/angular-ui-tree/angular-ui-tree
  * License: MIT
  */
@@ -764,6 +764,7 @@
                 targetNode,
                 targetElm,
                 isEmpty,
+                scrollDownBy,
                 targetOffset,
                 targetBefore;
 
@@ -808,8 +809,9 @@
                 bottom_scroll = top_scroll + (window.innerHeight || $window.document.clientHeight || $window.document.clientHeight);
 
                 // to scroll down if cursor y-position is greater than the bottom position the vertical scroll
-                if (bottom_scroll < eventObj.pageY && bottom_scroll <= document_height) {
-                  window.scrollBy(0, 10);
+                if (bottom_scroll < eventObj.pageY && bottom_scroll < document_height) {
+                  scrollDownBy = Math.min(document_height - bottom_scroll, 10);
+                  window.scrollBy(0, scrollDownBy);
                 }
 
                 // to scroll top if cursor y-position is less than the top position the vertical scroll
@@ -870,7 +872,8 @@
                               !UiTreeHelper.elementIsTreeNode(targetElm) &&
                               !UiTreeHelper.elementIsTreeNodes(targetElm) &&
                               !UiTreeHelper.elementIsTree(targetElm) &&
-                              !UiTreeHelper.elementIsPlaceholder(targetElm);
+                              !UiTreeHelper.elementIsPlaceholder(targetElm) &&
+                              !UiTreeHelper.elementIsEmptyTree(targetElm);
 
                 // Detect out of bounds condition, update drop target display, and prevent drop
                 if (outOfBounds) {
@@ -918,6 +921,8 @@
                 if (!pos.dirAx) {
                   if (UiTreeHelper.elementIsTree(targetElm)) {
                     targetNode = targetElm.controller('uiTree').scope;
+                  } else if (UiTreeHelper.elementIsEmptyTree(targetElm)) {
+                    targetNode = targetElm.controller('uiTree').scope;
                   } else if (UiTreeHelper.elementIsTreeNodeHandle(targetElm)) {
                     targetNode = targetElm.controller('uiTreeHandle').scope;
                   } else if (UiTreeHelper.elementIsTreeNode(targetElm)) {
@@ -937,8 +942,11 @@
                     return;
                   }
 
-                  // Show the placeholder if it was hidden for nodrop-enabled and this is a new tree
-                  if (targetNode.$treeScope && !targetNode.$parent.nodropEnabled && !targetNode.$treeScope.nodropEnabled) {
+                  // Show the placeholder if it was hidden for nodrop-enabled and this is a new tree (or an empty tree)
+                  if (
+                    (targetNode.$type == 'uiTree'&& !targetNode.nodropEnabled) ||
+                    (targetNode.$treeScope && !targetNode.$treeScope.nodropEnabled && !targetNode.$parent.nodropEnabled)
+                  ) {
                     placeElm.css('display', '');
                   }
 
@@ -1520,7 +1528,9 @@
           elementIsTreeNode: function (element) {
             return typeof element.attr('ui-tree-node') !== 'undefined';
           },
-
+          elementIsEmptyTree: function (element) {
+            return element.attr('class') == "angular-ui-tree-empty";
+          },
           elementIsTreeNodeHandle: function (element) {
             return typeof element.attr('ui-tree-handle') !== 'undefined';
           },
