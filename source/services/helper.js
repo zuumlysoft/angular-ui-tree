@@ -321,7 +321,7 @@
             return typeof element.attr('ui-tree-node') !== 'undefined';
           },
           elementIsEmptyTree: function (element) {
-            return element.attr('class') == "angular-ui-tree-empty";
+            return element.attr('class') == treeConfig.emptyTreeClass;
           },
           elementIsTreeNodeHandle: function (element) {
             return typeof element.attr('ui-tree-handle') !== 'undefined';
