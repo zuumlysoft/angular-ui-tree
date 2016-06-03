@@ -958,6 +958,16 @@
                     targetNode = targetNode.$nodeScope;
                   }
 
+                  // BEGIN: Artūrs Gailītis:
+                  /// allow new node to be dropped anywhere on the ui-tree-nodes element, not only on another node
+                  if (targetNode.$type == 'uiTreeNodes'
+                    && !isEmpty) { // a non-empty list of nodes - take last of them
+                    targetNode = targetNode.childNodes().slice(-1)[0]; // last treeNode from the list
+                    // TODO: may cause flicker if hovering between two existing nodes
+                    // do this only if we are below any node? How?
+                  }
+                  // END: Artūrs Gailītis
+
                   if (targetNode.$type != 'uiTreeNode'
                     && !isEmpty) { // Check if it is a uiTreeNode or it's an empty tree
                     return;
@@ -1529,7 +1539,7 @@
             return typeof element.attr('ui-tree-node') !== 'undefined';
           },
           elementIsEmptyTree: function (element) {
-            return element.attr('class') == "angular-ui-tree-empty";
+            return element.attr('class') == treeConfig.emptyTreeClass;
           },
           elementIsTreeNodeHandle: function (element) {
             return typeof element.attr('ui-tree-handle') !== 'undefined';

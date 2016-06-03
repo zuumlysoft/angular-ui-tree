@@ -1,3 +1,8 @@
+# 2.17.0
+
+* Allow to drop on ui-tree-nodes element (when on-empty tree visually larger than it's elements) [#3](https://github.com/zuumlysoft/angular-ui-tree/issues/3)
+* Respect emptyTreeClass CSS class from configuration in elementIsEmptyTree [#2](https://github.com/zuumlysoft/angular-ui-tree/issues/2)
+
 # 2.16.0
 
 *  Allow drag-drop on empty tree [#738](https://github.com/angular-ui-tree/angular-ui-tree/pull/738)
